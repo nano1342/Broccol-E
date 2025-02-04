@@ -1,0 +1,181 @@
+using System.Collections.Generic;
+using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.Table;
+
+struct Case
+{
+    public int pieceType;
+    public int pieceRotation;
+
+    public Case(int info1, int info2)
+    {
+        pieceType = info1;      //  0 is empty    1 is i    2 is L    3 is |    4 is T    5 is +
+        pieceRotation = info2;  //  0 is i  L  |  T  +      Then 1 rotates 90° clockwise
+    }
+}
+public class PipeGame : MonoBehaviour
+{
+    public GameObject pipeStraightPrefab; // Pipei
+    public GameObject pipeCornerPrefab;  // PipeL
+    public GameObject pipeVerticalPrefab; // Pipe-
+    public GameObject pipeTeePrefab;     // PipeT
+    public GameObject pipeCrossPrefab;   // Pipe+
+
+    public Transform posCenter;
+    public Console console;
+
+
+    int selectedGrid;
+    Case[,] plateau = new Case[5, 5];
+    int[,,] gridList = new int[3,5,5];
+    // Start is called before the first frame update
+    public void StartGame()
+    {
+        Dictionary<int, GameObject> pipePrefabs = new Dictionary<int, GameObject>
+        {
+            { 1, pipeStraightPrefab },  // Pipei
+            { 2, pipeCornerPrefab },    // PipeL
+            { 3, pipeVerticalPrefab },  // Pipe-
+            { 4, pipeTeePrefab },       // PipeT
+            { 5, pipeCrossPrefab }      // Pipe+
+        };
+
+        gridList = new int[,,]
+        {
+            // Grille 0
+            {
+                {0, 0, 0, 0, 0},
+                {0, 1, 0, 1, 0},
+                {0, 3, 0, 3, 0},
+                {0, 1, 0, 1, 0},
+                {0, 0, 0, 0, 0}
+            },
+            // Grille 1
+            {
+                {0, 0, 0, 0, 0},
+                {0, 1, 0, 1, 0},
+                {0, 4, 3, 4, 0},
+                {0, 1, 0, 1, 0},
+                {0, 0, 0, 0, 0}
+            },
+            // Grille 2
+            {
+                {0, 0, 1, 0, 1},
+                {0, 0, 3, 2, 2},
+                {1, 2, 5, 4, 0},
+                {2, 2, 3, 2, 2},
+                {0, 0, 1, 0, 1}
+            }
+        };
+
+        System.Random rnd = new System.Random();
+        selectedGrid = rnd.Next(3);
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                plateau[i, j] = new Case(gridList[selectedGrid,i,j], rnd.Next(4));
+            }
+        }
+        GenerateGrid();
+    }
+
+    void GenerateGrid()
+    {
+        Vector3 pos = posCenter.position;
+        Vector3 rot = this.gameObject.transform.localRotation.eulerAngles;
+        //Vector3 rot = new Vector3(0, 0, 0);
+        console.AddLine(pos.ToString() + " " + rot.ToString());
+
+
+        float tileSize = 0.05f;
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                int pieceType = plateau[i, j].pieceType;
+                int pieceRotation = plateau[i, j].pieceRotation;
+
+                GameObject prefab = GetPrefabForPieceType(pieceType);
+
+                if (prefab != null)
+                {
+                    GameObject pipe = Instantiate(prefab, new Vector3(j * tileSize * 2 + pos.x + tileSize * 5, -i * tileSize * 2 + pos.y + tileSize * 5, pos.z), Quaternion.Euler(rot.x, rot.y, rot.z + pieceRotation * 90));
+                    //GameObject pipe = Instantiate(prefab, posCenter);
+                    pipe.name = $"Pipe_{i}_{j}";
+                    RotatePipe rotatePipe = pipe.GetComponent<RotatePipe>();
+                    if (rotatePipe != null)
+                    {
+                        rotatePipe.rotationIndex = pieceRotation;
+                        rotatePipe.pipeGame = this;
+                    }
+                }
+            }
+        }
+    }
+    GameObject GetPrefabForPieceType(int pieceType)
+    {
+        switch (pieceType)
+        {
+            case 1: return pipeStraightPrefab;
+            case 2: return pipeCornerPrefab;
+            case 3: return pipeVerticalPrefab;
+            case 4: return pipeTeePrefab;
+            case 5: return pipeCrossPrefab;
+            default: return null;
+        }
+    }
+    public void UpdatePlateau(int i, int j, int newRotation)
+    {
+        if (i >= 0 && i < 5 && j >= 0 && j < 5)
+        {
+            plateau[i, j].pieceRotation = newRotation;
+        }
+    }
+    public void CheckSolution()
+    {
+        if (checkGrid())
+        {
+            Debug.Log("Game Complete !");
+        }
+    }
+    public bool checkGrid()
+    {
+        switch (selectedGrid)
+        {
+            case 0:
+                if (plateau[1, 1].pieceRotation == 0 && plateau[1, 3].pieceRotation == 0 && plateau[3, 1].pieceRotation == 2 && plateau[3, 3].pieceRotation == 2)
+                {
+                    if ((plateau[2, 1].pieceRotation == 0 || plateau[2, 1].pieceRotation == 2) && (plateau[2, 3].pieceRotation == 0 || plateau[2, 3].pieceRotation == 2)) return true;
+                }
+                return false;
+            case 1:
+                if (plateau[1, 1].pieceRotation == 0 && plateau[1, 3].pieceRotation == 0 && plateau[3, 1].pieceRotation == 2 && plateau[3, 3].pieceRotation == 2)
+                {
+                    if ((plateau[2, 1].pieceRotation == 3 && plateau[2, 3].pieceRotation == 1)) return true;
+                }
+                return false;
+            case 2:
+                if (plateau[2, 0].pieceRotation == 0 && plateau[0, 2].pieceRotation == 0 && plateau[4, 2].pieceRotation == 2 && plateau[0, 4].pieceRotation == 0 && plateau[4, 4].pieceRotation == 2)
+                {
+                    if ((plateau[1, 2].pieceRotation == 0 || plateau[1, 2].pieceRotation == 2) && (plateau[3, 2].pieceRotation == 0 || plateau[3, 2].pieceRotation == 2))
+                    {
+                        if (plateau[3, 0].pieceRotation == 0 && plateau[3, 1].pieceRotation == 3 && plateau[2, 1].pieceRotation == 1 &&
+                            plateau[1, 3].pieceRotation == 1 && plateau[1, 4].pieceRotation == 3 && plateau[3, 3].pieceRotation == 0 && plateau[3, 4].pieceRotation == 2)
+                        {
+                            if (plateau[3, 2].pieceRotation == 1) return true;
+                        }
+                    }
+                }
+                return false;
+            default:
+                return false;
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}
