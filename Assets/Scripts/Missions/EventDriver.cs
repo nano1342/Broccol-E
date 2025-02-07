@@ -5,7 +5,9 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [System.Serializable]
-public class MissionStartedEvent : UnityEvent<MissionEvent> { }
+public class MissionStartedEvent : UnityEvent { } // no arguments because they cannot be transferred through the GUI
+[System.Serializable]
+public class MissionCompletedEvent : UnityEvent { } // no arguments because they cannot be transferred through the GUI
 [System.Serializable]
 public class LostEvent : UnityEvent { }
 [System.Serializable]
@@ -98,8 +100,8 @@ public class EventDriver : MonoBehaviour
     private static int NEXT_EVENT_MIN_SECONDS = 10;
     private static int NEXT_EVENT_MAX_SECONDS = 60;
 
-    public Console console;
     public MissionStartedEvent missionStartedEvent;
+    public MissionCompletedEvent missionCompletedEvent;
     public LostEvent lostEvent;
     public NewSessionStartedEvent newSessionStartedEvent;
 
@@ -150,7 +152,6 @@ public class EventDriver : MonoBehaviour
         if (ticks % 600 == 0)
         {
             Debug.Log(this);
-            console.AddLine(this.ToString());
         }
     }
 
@@ -172,7 +173,7 @@ public class EventDriver : MonoBehaviour
                 var e = new MissionEvent();
                 events.Add(e);
                 Debug.Log("Instanciated mission event: " + e.missionKind);
-                missionStartedEvent.Invoke(e);
+                missionStartedEvent.Invoke();
             } else
             {
                 Debug.LogWarning("All events are instanciated. No new event created.");
@@ -187,17 +188,39 @@ public class EventDriver : MonoBehaviour
         }
     }
 
+    public MissionEvent getEventByKind(MissionEvent.MissionKind kind)
+    {
+        foreach (var e in events)
+        {
+            if (e.missionKind.Equals(kind))
+            {
+                return e;
+            }
+        }
+        return null;
+    }
+
     private void tickEvents()
     {
         foreach (var e in events)
         {
             var leftMs = e.getTimeLeftMs();
-            if (leftMs < 0 && lost == false)
+            if (leftMs < 0)
             {
                 lost = true;
                 lostEvent.Invoke();
             }
         }
+    }
+
+    public bool isEventActive(MissionEvent.MissionKind kind)
+    {
+        return getEventByKind(kind) != null;
+    }
+
+    public List<MissionEvent> getEventsSnapshot()
+    {
+        return new List<MissionEvent>(events);
     }
 
     public void completeEvent(MissionEvent.MissionKind kind)
@@ -210,6 +233,7 @@ public class EventDriver : MonoBehaviour
                 e.destroy();
                 events.Remove(e); // ok to remove because we break the loop right after.
                 found = true;
+                missionCompletedEvent.Invoke();
                 break;
             }
         }
