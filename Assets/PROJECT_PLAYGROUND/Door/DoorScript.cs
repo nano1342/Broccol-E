@@ -69,7 +69,6 @@ public class DoorScript : MonoBehaviour
         if (_isOpen)
         {
             // GO TOWARDS OPENING STATE
-            Debug.Log("open");
             if (doorLeft.transform.localPosition.x > leftOpenTransform.x)
             {
                 doorLeft.transform.localPosition -= new Vector3(openingSpeed, 0, 0);
@@ -90,7 +89,6 @@ public class DoorScript : MonoBehaviour
         } else
         {
             // GO TOWARDS CLOSING STATE
-            Debug.Log("closed");
             if (doorLeft.transform.localPosition.x < leftClosedTransform.x)
             {
                 doorLeft.transform.localPosition += new Vector3(openingSpeed, 0, 0);

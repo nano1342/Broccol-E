@@ -206,6 +206,7 @@ public class MusicManager : MonoBehaviour
     void Update()
     {
         if (volumeManagers == null) return;
+        if (eventDriver == null) return;
 
         double t = eventDriver.getGlobalTimeLeftMs();
         foreach (var v in volumeManagers)

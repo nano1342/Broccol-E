@@ -151,7 +151,7 @@ public class EventDriver : MonoBehaviour
     {
         if (ticks % 600 == 0)
         {
-            Debug.Log(this);
+            //Debug.Log(this);
         }
     }
 
