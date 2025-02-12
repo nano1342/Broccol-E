@@ -13,7 +13,7 @@ public class StartGame : MonoBehaviour
 
     public void startGame()
     {
-        console.AddLine("Start game !!!");
+        console.AddLine("Start game !!! depuis le startGame");
         XRRig.transform.position = TPAnchor.transform.position;
         eventDriver.startNewEventSession();
     }

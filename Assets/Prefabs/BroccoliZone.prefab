@@ -336,6 +336,7 @@ MonoBehaviour:
   fireParticles: {fileID: 1065516489548522703}
   repeatCount: 3
   delayBetweenRepeats: 0.2
+  eventDriver: {fileID: 0}
 --- !u!54 &1008950671802630273
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -451,6 +452,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3605830385068018184}
+  - component: {fileID: 4422782195614861964}
   m_Layer: 0
   m_Name: BroccoliZone
   m_TagString: Untagged
@@ -478,6 +480,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4422782195614861964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3871979535381426095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d651b94b16a2c03419b7f70b64e9b350, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1008950670972177432
 PrefabInstance:
   m_ObjectHideFlags: 0

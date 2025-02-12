@@ -23,6 +23,8 @@ public class PipeGame : MonoBehaviour
 
     public Transform posCenter;
     public Console console;
+    public bool pipeGameLaunched = false;
+    public PipeDoor doorScript;
 
 
     int selectedGrid;
@@ -31,6 +33,7 @@ public class PipeGame : MonoBehaviour
     // Start is called before the first frame update
     public void StartGame()
     {
+        pipeGameLaunched = true;
         Dictionary<int, GameObject> pipePrefabs = new Dictionary<int, GameObject>
         {
             { 1, pipeStraightPrefab },  // Pipei
@@ -82,13 +85,29 @@ public class PipeGame : MonoBehaviour
 
     void GenerateGrid()
     {
-        Vector3 pos = posCenter.position;
-        Vector3 rot = this.gameObject.transform.localRotation.eulerAngles;
-        //Vector3 rot = new Vector3(0, 0, 0);
-        console.AddLine(pos.ToString() + " " + rot.ToString());
-
-
         float tileSize = 0.05f;
+        float hoverHeight = 0.05f; // Hauteur à laquelle les tuyaux doivent flotter
+
+        // Récupération du Cube
+        Transform cubeTransform = transform.Find("Cube");
+        if (cubeTransform == null)
+        {
+            Debug.LogError("Cube introuvable sous PipeGameController !");
+            return;
+        }
+
+        // Déterminer l'axe normal au Cube (axe perpendiculaire)
+        Vector3 normal = cubeTransform.TransformDirection(Vector3.back); // Par défaut, "devant" le Cube
+
+        GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.name.StartsWith("GamePipe_"))
+            {
+                Destroy(obj);
+            }
+        }
+
         for (int i = 0; i < 5; i++)
         {
             for (int j = 0; j < 5; j++)
@@ -100,9 +119,23 @@ public class PipeGame : MonoBehaviour
 
                 if (prefab != null)
                 {
-                    GameObject pipe = Instantiate(prefab, new Vector3(j * tileSize * 2 + pos.x + tileSize * 5, -i * tileSize * 2 + pos.y + tileSize * 5, pos.z), Quaternion.Euler(rot.x, rot.y, rot.z + pieceRotation * 90));
-                    //GameObject pipe = Instantiate(prefab, posCenter);
-                    pipe.name = $"Pipe_{i}_{j}";
+                    // Position relative dans le plan local du Cube
+                    Vector3 localPipePosition = new Vector3(j * tileSize * 4 - (float)0.4, i * tileSize * 4 - (float)0.4, 0);
+
+                    // Convertir la position locale en position globale
+                    Vector3 worldPipePosition = cubeTransform.TransformPoint(localPipePosition);
+
+                    // Décaler la position le long de la normale pour que le pipe flotte au-dessus du Cube
+                    worldPipePosition += normal * hoverHeight;
+
+                    // Appliquer la rotation du Cube à la pièce
+                    Quaternion worldRotation = cubeTransform.rotation * Quaternion.Euler(0, 0, pieceRotation * 90);
+
+                    // Instanciation du pipe
+                    GameObject pipe = Instantiate(prefab, worldPipePosition, worldRotation);
+
+                    pipe.name = $"GamePipe_{i}_{j}";
+
                     RotatePipe rotatePipe = pipe.GetComponent<RotatePipe>();
                     if (rotatePipe != null)
                     {
@@ -136,7 +169,13 @@ public class PipeGame : MonoBehaviour
     {
         if (checkGrid())
         {
-            Debug.Log("Game Complete !");
+            pipeGameLaunched = false;
+            console.AddLine("PipeGame Finished");
+            //PipeDoor doorScript = GameObject.Find("Door")?.GetComponent<PipeDoor>();
+            if (doorScript != null && doorScript.doorOpened)
+            {
+                doorScript.StartCoroutine(doorScript.RotateDoorBack(doorScript.transform));
+            }
         }
     }
     public bool checkGrid()
@@ -144,26 +183,29 @@ public class PipeGame : MonoBehaviour
         switch (selectedGrid)
         {
             case 0:
-                if (plateau[1, 1].pieceRotation == 0 && plateau[1, 3].pieceRotation == 0 && plateau[3, 1].pieceRotation == 2 && plateau[3, 3].pieceRotation == 2)
+                if (plateau[1, 1].pieceRotation == 2 && plateau[1, 3].pieceRotation == 2 && plateau[3, 1].pieceRotation == 0 && plateau[3, 3].pieceRotation == 0)
                 {
                     if ((plateau[2, 1].pieceRotation == 0 || plateau[2, 1].pieceRotation == 2) && (plateau[2, 3].pieceRotation == 0 || plateau[2, 3].pieceRotation == 2)) return true;
                 }
                 return false;
             case 1:
-                if (plateau[1, 1].pieceRotation == 0 && plateau[1, 3].pieceRotation == 0 && plateau[3, 1].pieceRotation == 2 && plateau[3, 3].pieceRotation == 2)
+                if (plateau[1, 1].pieceRotation == 2 && plateau[1, 3].pieceRotation == 2 && plateau[3, 1].pieceRotation == 0 && plateau[3, 3].pieceRotation == 0)
                 {
-                    if ((plateau[2, 1].pieceRotation == 3 && plateau[2, 3].pieceRotation == 1)) return true;
+                    if (plateau[2, 1].pieceRotation == 0 && plateau[2, 3].pieceRotation == 2)
+                    {
+                        if (plateau[2,2].pieceRotation == 1 || plateau[2, 2].pieceRotation == 3) return true;
+                    }
                 }
                 return false;
             case 2:
-                if (plateau[2, 0].pieceRotation == 0 && plateau[0, 2].pieceRotation == 0 && plateau[4, 2].pieceRotation == 2 && plateau[0, 4].pieceRotation == 0 && plateau[4, 4].pieceRotation == 2)
+                if (plateau[2, 0].pieceRotation == 2 && plateau[0, 2].pieceRotation == 2 && plateau[4, 2].pieceRotation == 0 && plateau[0, 4].pieceRotation == 2 && plateau[4, 4].pieceRotation == 0)
                 {
-                    if ((plateau[1, 2].pieceRotation == 0 || plateau[1, 2].pieceRotation == 2) && (plateau[3, 2].pieceRotation == 0 || plateau[3, 2].pieceRotation == 2))
+                    if ((plateau[1, 2].pieceRotation == 2 || plateau[1, 2].pieceRotation == 0) && (plateau[3, 2].pieceRotation == 2 || plateau[3, 2].pieceRotation == 0))
                     {
                         if (plateau[3, 0].pieceRotation == 0 && plateau[3, 1].pieceRotation == 3 && plateau[2, 1].pieceRotation == 1 &&
                             plateau[1, 3].pieceRotation == 1 && plateau[1, 4].pieceRotation == 3 && plateau[3, 3].pieceRotation == 0 && plateau[3, 4].pieceRotation == 2)
                         {
-                            if (plateau[3, 2].pieceRotation == 1) return true;
+                            if (plateau[3, 2].pieceRotation == 2) return true;
                         }
                     }
                 }

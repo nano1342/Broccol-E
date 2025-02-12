@@ -37,7 +37,7 @@ class VolumeManager
      * Between 0 and 1
      */
     private float targetVolume;
-    private const float LINEAR_ADJUSTMENT_STEP = 0.0005f;
+    private const float LINEAR_ADJUSTMENT_STEP = 0.005f;
     public VolumeManager(AudioSource src, List<MathStepCheckpoint> checkpoints)
     {
         this.src = src;
@@ -206,7 +206,6 @@ public class MusicManager : MonoBehaviour
     void Update()
     {
         if (volumeManagers == null) return;
-        if (eventDriver == null) return;
 
         double t = eventDriver.getGlobalTimeLeftMs();
         foreach (var v in volumeManagers)

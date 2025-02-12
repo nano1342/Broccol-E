@@ -105,10 +105,12 @@ public class EventDriver : MonoBehaviour
     public LostEvent lostEvent;
     public NewSessionStartedEvent newSessionStartedEvent;
 
+    public Console console;
+
     // Start is called before the first frame update
     void Start()
     {
-        startNewEventSession();
+        //startNewEventSession();
     }
 
     // Update is called once per frame
@@ -152,6 +154,7 @@ public class EventDriver : MonoBehaviour
         if (ticks % 600 == 0)
         {
             //Debug.Log(this);
+            console.AddLine(this.ToString());
         }
     }
 
@@ -166,16 +169,20 @@ public class EventDriver : MonoBehaviour
 
     private void trySpawningEvent()
     {
+        
         if (nextEventTimeStamp < System.DateTime.Now)
         {
+            console.AddLine("---------- atteint ! " + events.Count());
             if (MissionEvent.eventAvailable())
             {
+                console.AddLine("available");
                 var e = new MissionEvent();
                 events.Add(e);
                 Debug.Log("Instanciated mission event: " + e.missionKind);
                 missionStartedEvent.Invoke();
             } else
             {
+                console.AddLine("sinon");
                 Debug.LogWarning("All events are instanciated. No new event created.");
             }
 
@@ -205,8 +212,9 @@ public class EventDriver : MonoBehaviour
         foreach (var e in events)
         {
             var leftMs = e.getTimeLeftMs();
-            if (leftMs < 0)
+            if (leftMs < 0 && !lost)
             {
+                Debug.Log("oh no! Anyways...");
                 lost = true;
                 lostEvent.Invoke();
             }
