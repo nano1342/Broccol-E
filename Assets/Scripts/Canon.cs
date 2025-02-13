@@ -16,7 +16,7 @@ public class Canon : MonoBehaviour
         // Get the Rigidbody component of the projectile
         Rigidbody projRigidbody = proj.GetComponent<Rigidbody>();
 
-        projRigidbody.velocity = projectileSpawnPoint.forward * 10f;
+        projRigidbody.velocity = projectileSpawnPoint.forward * 5f;
     }
 
     public void returnToAnchor()

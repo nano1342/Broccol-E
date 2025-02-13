@@ -92,7 +92,7 @@ public class MissionEvent
 public class EventDriver : MonoBehaviour
 {
     private System.DateTime sessionStart;
-    private List<MissionEvent> events;
+    private List<MissionEvent> events = new List<MissionEvent>();
     private static System.Random random = new System.Random();
     private bool lost;
     private long ticks = 0;
@@ -140,9 +140,12 @@ public class EventDriver : MonoBehaviour
         str += "lost: " + lost + "; ";
         str += "elapsed (s): " + getElapsedSpan().TotalSeconds + "; ";
         str += "ongoing missions: [";
-        foreach (var e in events)
+        if (events != null)
         {
-            str += e.ToString();
+            foreach (var e in events)
+            {
+                str += e.ToString();
+            }
         }
         str += "]; ";
         str += "next mission event: " + getTimeBeforeNextEventSpan().TotalSeconds + ";";
@@ -153,7 +156,7 @@ public class EventDriver : MonoBehaviour
     {
         if (ticks % 600 == 0)
         {
-            //Debug.Log(this);
+            //Debug.Log(this)
             console.AddLine(this.ToString());
         }
     }
@@ -165,6 +168,7 @@ public class EventDriver : MonoBehaviour
         events = new List<MissionEvent>();
         lost = false;
         newSessionStartedEvent.Invoke();
+        console.AddLine("#####GAME STARTED#####");
     }
 
     private void trySpawningEvent()
@@ -172,7 +176,7 @@ public class EventDriver : MonoBehaviour
         
         if (nextEventTimeStamp < System.DateTime.Now)
         {
-            console.AddLine("---------- atteint ! " + events.Count());
+            //console.AddLine("---------- atteint ! " + events.Count());
             if (MissionEvent.eventAvailable())
             {
                 console.AddLine("available");
@@ -209,6 +213,7 @@ public class EventDriver : MonoBehaviour
 
     private void tickEvents()
     {
+        if (events == null) return;
         foreach (var e in events)
         {
             var leftMs = e.getTimeLeftMs();
@@ -254,6 +259,8 @@ public class EventDriver : MonoBehaviour
     public double getGlobalTimeLeftMs()
     {
         double min = long.MaxValue;
+        if (events == null) return min;
+
         foreach (var e in events)
         {
             double localMin = e.getTimeLeftMs();

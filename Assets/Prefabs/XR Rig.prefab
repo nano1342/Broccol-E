@@ -86,7 +86,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 384
   m_InteractionLayers:
-    m_Bits: 4294967039
+    m_Bits: 4294966015
   m_AttachTransform: {fileID: 5392793432858561934}
   m_KeepSelectedTargetValid: 1
   m_StartingSelectedInteractable: {fileID: 0}
@@ -871,7 +871,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5392793433470119108}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 31.32}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5392793433586342849}
@@ -1293,7 +1293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5392793434416775057
 Transform:
   m_ObjectHideFlags: 0
@@ -2816,7 +2816,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1914848198021937679, guid: 07f87e80f3592434182571384d4285e9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.05
+      value: 0.031
       objectReference: {fileID: 0}
     - target: {fileID: 1914848198021937679, guid: 07f87e80f3592434182571384d4285e9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2824,7 +2824,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1914848198021937679, guid: 07f87e80f3592434182571384d4285e9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.12397
+      value: 0.074
       objectReference: {fileID: 0}
     - target: {fileID: 1914848198021937679, guid: 07f87e80f3592434182571384d4285e9, type: 3}
       propertyPath: m_LocalRotation.w

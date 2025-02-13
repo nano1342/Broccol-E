@@ -1,5 +1,9 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
+
+[System.Serializable]
+public class PushedEvent : UnityEvent { }
 
 public class ButtonLED : MonoBehaviour
 {
@@ -10,10 +14,13 @@ public class ButtonLED : MonoBehaviour
     public float moveDistance = 0.01f; // Distance to move
     public float moveDuration = 0.1f; // Duration of the movement
 
+    public PushedEvent pushedEvent;
+
     public void push()
     {
         //StartCoroutine(MoveCubeSmoothly(cube2.transform, cube2.transform.position, cube2.transform.position + new Vector3(0, 0, -moveDistance), moveDuration));
         StartCoroutine(MoveCubeSmoothly(cube2.transform, cube2.transform.position, anchor.position, moveDuration));
+        pushedEvent.Invoke();
     }
 
     private IEnumerator MoveCubeSmoothly(Transform target, Vector3 startPos, Vector3 endPos, float duration)
