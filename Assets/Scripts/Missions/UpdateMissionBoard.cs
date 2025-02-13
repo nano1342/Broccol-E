@@ -24,11 +24,10 @@ public class UpdateMissionBoard : MonoBehaviour
 
         List<MissionEvent> activeMissions = eventDriver.getEventsSnapshot();
 
-        foreach (MissionEvent e in  activeMissions)
+        foreach (MissionEvent e in activeMissions)
         {
 
             //MissionEvent e = eventDriver.getEventByKind();
-            console.AddLine("handleNewMissionEvent");
             console.AddLine(e.ToString());
             if (e.missionKind == MissionEvent.MissionKind.CHANGE_SOLAR_PANNEL)
             {

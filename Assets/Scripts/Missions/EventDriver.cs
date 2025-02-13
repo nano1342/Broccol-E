@@ -92,25 +92,25 @@ public class MissionEvent
 public class EventDriver : MonoBehaviour
 {
     private System.DateTime sessionStart;
-    private List<MissionEvent> events = new List<MissionEvent>();
+    private List<MissionEvent> events;
     private static System.Random random = new System.Random();
     private bool lost;
+    private bool running = false;
     private long ticks = 0;
     private System.DateTime nextEventTimeStamp;
     private static int NEXT_EVENT_MIN_SECONDS = 10;
     private static int NEXT_EVENT_MAX_SECONDS = 60;
 
+    public Console console;
     public MissionStartedEvent missionStartedEvent;
     public MissionCompletedEvent missionCompletedEvent;
     public LostEvent lostEvent;
     public NewSessionStartedEvent newSessionStartedEvent;
 
-    public Console console;
-
     // Start is called before the first frame update
     void Start()
     {
-        //startNewEventSession();
+        startNewEventSession();
     }
 
     // Update is called once per frame
@@ -122,6 +122,10 @@ public class EventDriver : MonoBehaviour
         ticks++;
     }
 
+    public bool isRunning()
+    {
+        return running;
+    }
     private System.TimeSpan getElapsedSpan()
     {
         long elapsedTicks = System.DateTime.Now.Ticks - sessionStart.Ticks;
@@ -140,12 +144,9 @@ public class EventDriver : MonoBehaviour
         str += "lost: " + lost + "; ";
         str += "elapsed (s): " + getElapsedSpan().TotalSeconds + "; ";
         str += "ongoing missions: [";
-        if (events != null)
+        foreach (var e in events)
         {
-            foreach (var e in events)
-            {
-                str += e.ToString();
-            }
+            str += e.ToString();
         }
         str += "]; ";
         str += "next mission event: " + getTimeBeforeNextEventSpan().TotalSeconds + ";";
@@ -156,37 +157,33 @@ public class EventDriver : MonoBehaviour
     {
         if (ticks % 600 == 0)
         {
-            //Debug.Log(this)
-            console.AddLine(this.ToString());
+            Debug.Log(this);
         }
     }
 
     public void startNewEventSession()
     {
+        console.AddLine("######## startNewEventSession ########");
         this.sessionStart = System.DateTime.Now;
         nextEventTimeStamp = System.DateTime.Now.AddSeconds(10);
         events = new List<MissionEvent>();
         lost = false;
+        running = true;
         newSessionStartedEvent.Invoke();
-        console.AddLine("#####GAME STARTED#####");
     }
 
     private void trySpawningEvent()
     {
-        
         if (nextEventTimeStamp < System.DateTime.Now)
         {
-            //console.AddLine("---------- atteint ! " + events.Count());
             if (MissionEvent.eventAvailable())
             {
-                console.AddLine("available");
                 var e = new MissionEvent();
                 events.Add(e);
-                Debug.Log("Instanciated mission event: " + e.missionKind);
+                console.AddLine("Instanciated mission event: " + e.missionKind);
                 missionStartedEvent.Invoke();
             } else
             {
-                console.AddLine("sinon");
                 Debug.LogWarning("All events are instanciated. No new event created.");
             }
 
@@ -213,7 +210,6 @@ public class EventDriver : MonoBehaviour
 
     private void tickEvents()
     {
-        if (events == null) return;
         foreach (var e in events)
         {
             var leftMs = e.getTimeLeftMs();
@@ -259,8 +255,6 @@ public class EventDriver : MonoBehaviour
     public double getGlobalTimeLeftMs()
     {
         double min = long.MaxValue;
-        if (events == null) return min;
-
         foreach (var e in events)
         {
             double localMin = e.getTimeLeftMs();
