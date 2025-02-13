@@ -9,6 +9,7 @@ public class BlueButtonBroccoli : MonoBehaviour
     public float delayBetweenRepeats = 0.2f;
 
     public MissionWaterBroccoli missionScript;
+    public AudioSource audioSource;
 
     public void OnMouseDown()
     {
@@ -39,6 +40,11 @@ public class BlueButtonBroccoli : MonoBehaviour
 
     IEnumerator PlayWaterEffect()
     {
+        if (audioSource != null && audioSource.clip != null)
+        {
+            audioSource.Play();
+        }
+
         for (int i = 0; i < repeatCount; i++)
         {
             waterParticles.Play();

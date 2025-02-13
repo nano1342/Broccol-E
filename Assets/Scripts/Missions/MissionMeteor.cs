@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class MissionMeteor : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public EventDriver eventDriver;
+
+    public void handleNewMissionEvent()
     {
-        
+        List<MissionEvent> activeMissions = eventDriver.getEventsSnapshot();
+
+        foreach (MissionEvent e in activeMissions)
+        {
+            if (e.missionKind == MissionEvent.MissionKind.WATER_BROCCOLI)
+            {
+                startMission();
+                return;
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void startMission()
     {
-        
+
     }
 }

@@ -9,7 +9,8 @@ public class ButtonLED : MonoBehaviour
 {
     public GameObject cube1;
     public GameObject cube2;
-    public Transform anchor;
+    public Transform anchorPressed;
+    public Transform anchorUnpressed;
 
     public float moveDistance = 0.01f; // Distance to move
     public float moveDuration = 0.1f; // Duration of the movement
@@ -19,7 +20,7 @@ public class ButtonLED : MonoBehaviour
     public void push()
     {
         //StartCoroutine(MoveCubeSmoothly(cube2.transform, cube2.transform.position, cube2.transform.position + new Vector3(0, 0, -moveDistance), moveDuration));
-        StartCoroutine(MoveCubeSmoothly(cube2.transform, cube2.transform.position, anchor.position, moveDuration));
+        StartCoroutine(MoveCubeSmoothly(cube2.transform, anchorUnpressed.position, anchorPressed.position, moveDuration));
         pushedEvent.Invoke();
     }
 
