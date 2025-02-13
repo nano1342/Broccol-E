@@ -25,6 +25,7 @@ public class PipeGame : MonoBehaviour
     public Console console;
     public bool pipeGameLaunched = false;
     public PipeDoor doorScript;
+    public EventDriver eventDriver;
 
 
     int selectedGrid;
@@ -176,6 +177,7 @@ public class PipeGame : MonoBehaviour
             {
                 doorScript.StartCoroutine(doorScript.RotateDoorBack(doorScript.transform));
             }
+            eventDriver.completeEvent(MissionEvent.MissionKind.FIX_PIPES);
         }
     }
     public bool checkGrid()

@@ -5,6 +5,7 @@ using UnityEngine;
 public class MissionMeteor : MonoBehaviour
 {
     public EventDriver eventDriver;
+    public GameObject asteroidPrefab;
 
     public void handleNewMissionEvent()
     {

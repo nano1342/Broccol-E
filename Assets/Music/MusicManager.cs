@@ -38,6 +38,7 @@ class VolumeManager
      */
     private float targetVolume;
     private const float LINEAR_ADJUSTMENT_STEP = 0.005f;
+    private const float GLOBAL_VOLUME = 0.75f;
     public VolumeManager(AudioSource src, List<MathStepCheckpoint> checkpoints)
     {
         this.src = src;
@@ -52,7 +53,7 @@ class VolumeManager
     public void tick(double timeLeftMs)
     {
         float timeLeftSeconds = (float) timeLeftMs / 1_000;
-        targetVolume = mathStep(timeLeftSeconds, checkpoints);
+        targetVolume = mathStep(timeLeftSeconds, checkpoints) * GLOBAL_VOLUME;
         if (Math.Abs(src.volume - targetVolume) < LINEAR_ADJUSTMENT_STEP)
         {
             src.volume = targetVolume;

@@ -110,7 +110,7 @@ public class EventDriver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startNewEventSession();
+        //startNewEventSession();
     }
 
     // Update is called once per frame
@@ -174,8 +174,9 @@ public class EventDriver : MonoBehaviour
 
     private void trySpawningEvent()
     {
-        if (nextEventTimeStamp < System.DateTime.Now)
+        if (nextEventTimeStamp < System.DateTime.Now && running)
         {
+            console.AddLine("trySpawningEvent");
             if (MissionEvent.eventAvailable())
             {
                 var e = new MissionEvent();
@@ -184,7 +185,7 @@ public class EventDriver : MonoBehaviour
                 missionStartedEvent.Invoke();
             } else
             {
-                Debug.LogWarning("All events are instanciated. No new event created.");
+                console.AddLine("All events are instanciated. No new event created.");
             }
 
             // define when the next event will occur
