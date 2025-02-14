@@ -24,6 +24,7 @@ public class PipeGame : MonoBehaviour
     public Transform posCenter;
     public Console console;
     public bool pipeGameLaunched = false;
+    public MissionPipes scriptMission;
 
 
     int selectedGrid;
@@ -169,6 +170,7 @@ public class PipeGame : MonoBehaviour
     {
         if (checkGrid())
         {
+            scriptMission.completeMission();
             pipeGameLaunched = false;
             console.AddLine("PipeGame Finished");
             PipeDoor doorScript = GameObject.Find("Door")?.GetComponent<PipeDoor>();
