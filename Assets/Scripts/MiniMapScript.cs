@@ -14,6 +14,8 @@ public class MiniMapScript : MonoBehaviour
     public GameObject rechargeBatteryLocation;
     public GameObject destroyMeteoriteLocation;
     public GameObject changeThermalShieldLocation;
+    public GameObject answerToPCLocation;
+    public GameObject enterDigicodeLocation;
     private Dictionary<MissionKind, GameObject> missionLocations;
     // Start is called before the first frame update
     void Start()
@@ -27,7 +29,9 @@ public class MiniMapScript : MonoBehaviour
             { MissionKind.FIX_PIPES, fixPipesLocation },
             { MissionKind.DESTROY_METEORITE, destroyMeteoriteLocation },
             { MissionKind.REPAIR_CABLES, repairCableLocation },
-            { MissionKind.WATER_BROCCOLI, waterBroccoliLocation }
+            { MissionKind.WATER_BROCCOLI, waterBroccoliLocation },
+            { MissionKind.ENTER_DIGICODE, enterDigicodeLocation },
+            { MissionKind.ANSWER_TO_PC, answerToPCLocation}
         };
 
         foreach (var v in missionLocations)

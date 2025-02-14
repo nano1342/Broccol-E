@@ -2,20 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissionMeteor : MonoBehaviour
+public class MissionDigicode : MonoBehaviour
 {
     public EventDriver eventDriver;
-    public GameObject asteroidPrefab;
-    public Transform asteroidSpawnPoint;
-    public Transform asteroidEndPoint;
-
+    public ScreenManager screenManager;
     public void handleNewMissionEvent()
     {
         List<MissionEvent> activeMissions = eventDriver.getEventsSnapshot();
 
         foreach (MissionEvent e in activeMissions)
         {
-            if (e.missionKind == MissionEvent.MissionKind.DESTROY_METEORITE)
+            if (e.missionKind == MissionEvent.MissionKind.ENTER_DIGICODE)
             {
                 startMission();
                 return;
@@ -25,10 +22,11 @@ public class MissionMeteor : MonoBehaviour
 
     public void startMission()
     {
-        GameObject meteor = Instantiate(asteroidPrefab, asteroidSpawnPoint.position, asteroidSpawnPoint.rotation);
-        meteor.GetComponent<Rigidbody>().velocity = asteroidSpawnPoint.forward * 10f;
-
+        screenManager.GenerateRandomCode();
     }
 
-
+    public void completeMission()
+    {
+        eventDriver.completeEvent(MissionEvent.MissionKind.ENTER_DIGICODE);
+    }
 }

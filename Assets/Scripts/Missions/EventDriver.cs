@@ -27,6 +27,8 @@ public class MissionEvent
         WATER_BROCCOLI,
         DESTROY_METEORITE,
         CHANGE_THERMAL_SHIELD,
+        ANSWER_TO_PC,
+        ENTER_DIGICODE,
     }
     private static Dictionary<MissionKind, int> eventDurations = new Dictionary<MissionKind, int>
     {
@@ -38,6 +40,8 @@ public class MissionEvent
         {MissionKind.WATER_BROCCOLI, 180 },
         {MissionKind.DESTROY_METEORITE, 120 },
         {MissionKind.CHANGE_THERMAL_SHIELD, 180 },
+        {MissionKind.ANSWER_TO_PC, 60 },
+        {MissionKind.ENTER_DIGICODE, 120 },
     };
     private static List<MissionKind> availableMissions = new List<MissionKind>(System.Enum.GetValues(typeof(MissionKind)).Cast<MissionKind>());
 
@@ -99,7 +103,7 @@ public class EventDriver : MonoBehaviour
     private long ticks = 0;
     private System.DateTime nextEventTimeStamp;
     private static int NEXT_EVENT_MIN_SECONDS = 10;
-    private static int NEXT_EVENT_MAX_SECONDS = 60;
+    private static int NEXT_EVENT_MAX_SECONDS = 30;
 
     public Console console;
     public MissionStartedEvent missionStartedEvent;

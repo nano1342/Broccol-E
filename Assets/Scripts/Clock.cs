@@ -81,6 +81,8 @@ public class Clock : MonoBehaviour
         else if (kind == MissionEvent.MissionKind.RECHARGE_BATTERY) return "Recharge battery";
         else if (kind == MissionEvent.MissionKind.REPAIR_CABLES) return "Repair cables";
         else if (kind == MissionEvent.MissionKind.WATER_BROCCOLI) return "Water broccoli";
+        else if (kind == MissionEvent.MissionKind.ANSWER_TO_PC) return "Answer to PC";
+        else if (kind == MissionEvent.MissionKind.ENTER_DIGICODE) return "Enter digicode";
         else throw new System.Exception("Unknown kind");
     }
 }

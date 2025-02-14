@@ -6,6 +6,7 @@ public class Meteor : MonoBehaviour
 {
 
     public int healthPoints = 10;
+    //public EventDriver eventDriver;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -19,6 +20,9 @@ public class Meteor : MonoBehaviour
 
     public void die()
     {
+        GameObject eventDriverObj = GameObject.Find("MissionsManager");
+        EventDriver eventDriver = eventDriverObj.GetComponent<EventDriver>();
+        eventDriver.completeEvent(MissionEvent.MissionKind.DESTROY_METEORITE);
         Destroy(gameObject);
     }
 }

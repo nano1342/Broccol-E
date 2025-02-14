@@ -7,6 +7,7 @@ public class Canon : MonoBehaviour
     public GameObject projectilePrefab;
     public Transform projectileSpawnPoint;
     public Transform canonRestPoint;
+    public Console console;
 
     public void Fire()
     {
@@ -16,11 +17,20 @@ public class Canon : MonoBehaviour
         // Get the Rigidbody component of the projectile
         Rigidbody projRigidbody = proj.GetComponent<Rigidbody>();
 
-        projRigidbody.velocity = projectileSpawnPoint.forward * 5f;
+        projRigidbody.velocity = projectileSpawnPoint.forward * 15f;
     }
 
     public void returnToAnchor()
     {
-        transform.position = projectileSpawnPoint.position;
+        console.AddLine("returnToAnchor");
+        if (projectileSpawnPoint != null)
+        {
+            console.AddLine("ouiii" + transform.position + " / " + projectileSpawnPoint.position);
+            //this.transform.position = new Vector3(1, 0, 3.3f);
+            this.transform.position = new Vector3(0.9431f, -0.06980002f, 3.0791f);
+            this.transform.rotation = Quaternion.Euler(0, 90, 0);
+            this.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+        }
+        
     }
 }

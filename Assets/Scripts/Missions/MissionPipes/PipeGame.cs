@@ -24,8 +24,6 @@ public class PipeGame : MonoBehaviour
     public Transform posCenter;
     public Console console;
     public bool pipeGameLaunched = false;
-    public PipeDoor doorScript;
-    public EventDriver eventDriver;
 
 
     int selectedGrid;
@@ -34,6 +32,7 @@ public class PipeGame : MonoBehaviour
     // Start is called before the first frame update
     public void StartGame()
     {
+        if (pipeGameLaunched) return;
         pipeGameLaunched = true;
         Dictionary<int, GameObject> pipePrefabs = new Dictionary<int, GameObject>
         {
@@ -172,12 +171,11 @@ public class PipeGame : MonoBehaviour
         {
             pipeGameLaunched = false;
             console.AddLine("PipeGame Finished");
-            //PipeDoor doorScript = GameObject.Find("Door")?.GetComponent<PipeDoor>();
+            PipeDoor doorScript = GameObject.Find("Door")?.GetComponent<PipeDoor>();
             if (doorScript != null && doorScript.doorOpened)
             {
                 doorScript.StartCoroutine(doorScript.RotateDoorBack(doorScript.transform));
             }
-            eventDriver.completeEvent(MissionEvent.MissionKind.FIX_PIPES);
         }
     }
     public bool checkGrid()

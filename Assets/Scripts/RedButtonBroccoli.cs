@@ -5,7 +5,7 @@ public class RedButtonBroccoli : MonoBehaviour
 {
     public GameObject sphere;
     public GameObject objectToMove;
-    public Vector3 targetPosition;
+    public GameObject targetObject;
 
     // Sphere
     private float angleValue = -135f;
@@ -39,7 +39,7 @@ public class RedButtonBroccoli : MonoBehaviour
 
         yield return RotateSmoothly(angleValue); // Rotation initiale
 
-        yield return ThrowObject(targetPosition); // Broccoli jumping out
+        yield return ThrowObject(targetObject.transform.position); // Broccoli jumping out
 
         yield return RotateSmoothly(-angleValue); // Rotation inverse
 
