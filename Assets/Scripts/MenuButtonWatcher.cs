@@ -10,6 +10,7 @@ public class MenuButtonEvent : UnityEvent<bool> { }
 public class MenuButtonWatcher : MonoBehaviour
 {
     public MenuButtonEvent menuButtonPress;
+    public StartGame gameScript;
     public Console console;
 
     private bool lastButtonState = false;
@@ -72,6 +73,8 @@ public class MenuButtonWatcher : MonoBehaviour
 
     void Update()
     {
+        if (!gameScript.debug) return;
+
         bool tempState = false;
         foreach (var device in devicesWithMenuButton)
         {

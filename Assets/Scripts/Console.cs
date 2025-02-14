@@ -12,6 +12,7 @@ public class Console : MonoBehaviour
     private void Start()
     {
         lines = new List<string>();
+        this.gameObject.SetActive(false);
     }
 
     public void Flush()
@@ -34,22 +35,15 @@ public class Console : MonoBehaviour
         displayer.text = content;
     }
 
-
-    public void logPosition(GameObject obj) {
-        if (obj == null)
+    public void setVisible(bool visible)
+    {
+        if (visible)
         {
-            this.AddLine("Error in debugPos : obj is null.");
+            this.gameObject.SetActive(true);
         }
-
-        try
+        else
         {
-            Vector3 pos = obj.transform.position;
-            string name = obj.name;
-            this.AddLine(name + ".pos = " + pos);
-        }
-        catch (Exception e)
-        {
-            this.AddLine(e.ToString());
+            this.gameObject.SetActive(false);
         }
     }
 }

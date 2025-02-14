@@ -6,6 +6,7 @@ public class RedButtonBroccoli : MonoBehaviour
     public GameObject sphere;
     public GameObject objectToMove;
     public GameObject targetObject;
+    public AudioSource audioSourceFrying;
 
     // Sphere
     private float angleValue = -135f;
@@ -27,6 +28,7 @@ public class RedButtonBroccoli : MonoBehaviour
 
     public void OnTriggerPressed()
     {
+        audioSourceFrying.Play();
         if (!isRotating && sphere != null && objectToMove != null)
         {
             StartCoroutine(RotateSequence());

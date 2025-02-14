@@ -115,6 +115,7 @@ public class EventDriver : MonoBehaviour
     void Start()
     {
         //startNewEventSession();
+        events = new List<MissionEvent>();
     }
 
     // Update is called once per frame
