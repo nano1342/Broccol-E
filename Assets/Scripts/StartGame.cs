@@ -11,10 +11,11 @@ public class StartGame : MonoBehaviour
     public GameObject XRRig;
     public GameObject TPAnchor;
     public EventDriver eventDriver;
-    public bool debug = false;
+    public bool debug;
 
     public void startMainGame()
     {
+        debug = false;
         console.AddLine("Start game !!! depuis le startGame");
         XRRig.transform.position = TPAnchor.transform.position;
         eventDriver.startNewEventSession();

@@ -38,7 +38,7 @@ class VolumeManager
      */
     private float targetVolume;
     private const float LINEAR_ADJUSTMENT_STEP = 0.005f;
-    private const float GLOBAL_VOLUME = 0.75f;
+    private const float GLOBAL_VOLUME = 0.5f;
     public VolumeManager(AudioSource src, List<MathStepCheckpoint> checkpoints)
     {
         this.src = src;

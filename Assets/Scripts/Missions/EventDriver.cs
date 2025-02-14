@@ -16,7 +16,7 @@ public class NewSessionStartedEvent: UnityEvent { }
 public class MissionEvent
 {
     private static System.Random random = new System.Random();
-    
+
     public enum MissionKind
     {
         CHANGE_SOLAR_PANNEL,
@@ -44,6 +44,22 @@ public class MissionEvent
         {MissionKind.ENTER_DIGICODE, 120 },
     };
     private static List<MissionKind> availableMissions = new List<MissionKind>(System.Enum.GetValues(typeof(MissionKind)).Cast<MissionKind>());
+    private static List<MissionKind> disabledMissions = new List<MissionKind>
+    {
+        MissionKind.CHANGE_THERMAL_SHIELD,
+        MissionKind.CHANGE_ANTENNA,
+        MissionKind.CHANGE_SOLAR_PANNEL,
+        MissionKind.REPAIR_CABLES,
+        MissionKind.RECHARGE_BATTERY,
+    };
+    // il faut corriger le son et le debug
+    public static void init()
+    {
+        foreach (var e in disabledMissions)
+        {
+            availableMissions.Remove(e);
+        }
+    }
 
     public MissionKind missionKind { get; private set; }
     private System.DateTime start;
@@ -116,6 +132,7 @@ public class EventDriver : MonoBehaviour
     {
         //startNewEventSession();
         events = new List<MissionEvent>();
+        MissionEvent.init();
     }
 
     // Update is called once per frame

@@ -13,8 +13,8 @@ public class DigicodeManager : MonoBehaviour
     public Console console;
     private Color[] colors = { Color.red, Color.green };
     public GameObject digicodeBackground;
-    public ScreenManager screenManager;
     private bool gameRunning = false;
+    public MissionDigicode scriptMission;
 
     public void OnButtonPress(string value)
     {
@@ -31,6 +31,7 @@ public class DigicodeManager : MonoBehaviour
             if (enteredCode == correctCode)
             {
                 console.AddLine("Code correct !");
+                scriptMission.completeMission();
                 screenTextMessage.text = "Welcome aboard, Captain";
                 enteredCode = "";
                 gameRunning = false;

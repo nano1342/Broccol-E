@@ -10,6 +10,13 @@ public class Meteor : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        GameObject consoleObj = GameObject.Find("GOConsole");
+        if (consoleObj != null )
+        {
+            Console console = consoleObj.GetComponent<Console>();
+            console.AddLine("arrivéééé jivhng");
+        }
+
         Debug.Log("collision meteor : " + collision.ToString());    //REGARDER LE PRINT et mettre la même chose dans la collision du projectile
         healthPoints--;
         if (healthPoints <= 0)
@@ -20,9 +27,15 @@ public class Meteor : MonoBehaviour
 
     public void die()
     {
+        GameObject consoleObj = GameObject.Find("GOConsole");
+        if (consoleObj != null)
+        {
+            Console console = consoleObj.GetComponent<Console>();
+            console.AddLine("DIE");
+        }
         GameObject eventDriverObj = GameObject.Find("MissionsManager");
         EventDriver eventDriver = eventDriverObj.GetComponent<EventDriver>();
         eventDriver.completeEvent(MissionEvent.MissionKind.DESTROY_METEORITE);
-        Destroy(gameObject);
+        Destroy(this.gameObject);
     }
 }

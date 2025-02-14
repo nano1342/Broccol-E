@@ -20,8 +20,8 @@ public class PipeGame : MonoBehaviour
     public GameObject pipeVerticalPrefab; // Pipe-
     public GameObject pipeTeePrefab;     // PipeT
     public GameObject pipeCrossPrefab;   // Pipe+
+    public PipeDoor doorScript;
 
-    public Transform posCenter;
     public Console console;
     public bool pipeGameLaunched = false;
     public MissionPipes scriptMission;
@@ -170,14 +170,14 @@ public class PipeGame : MonoBehaviour
     {
         if (checkGrid())
         {
-            scriptMission.completeMission();
             pipeGameLaunched = false;
             console.AddLine("PipeGame Finished");
-            PipeDoor doorScript = GameObject.Find("Door")?.GetComponent<PipeDoor>();
             if (doorScript != null && doorScript.doorOpened)
             {
+                console.AddLine("Door Closing");
                 doorScript.StartCoroutine(doorScript.RotateDoorBack(doorScript.transform));
             }
+            scriptMission.completeMission();
         }
     }
     public bool checkGrid()

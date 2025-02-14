@@ -12,7 +12,7 @@ public class Console : MonoBehaviour
     private void Start()
     {
         lines = new List<string>();
-        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
     }
 
     public void Flush()

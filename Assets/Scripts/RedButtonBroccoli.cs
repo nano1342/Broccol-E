@@ -28,7 +28,7 @@ public class RedButtonBroccoli : MonoBehaviour
 
     public void OnTriggerPressed()
     {
-        audioSourceFrying.Play();
+        audioSourceFrying.PlayDelayed(1f);
         if (!isRotating && sphere != null && objectToMove != null)
         {
             StartCoroutine(RotateSequence());

@@ -6,8 +6,8 @@ public class QuitGameVR : MonoBehaviour
 {
     public void Quit()
     {
-        Debug.Log("Fermeture du jeu dans 3 secondes...");
-        StartCoroutine(QuitWithDelay(3f));
+        Debug.Log("Fermeture du jeu dans 4 secondes...");
+        StartCoroutine(QuitWithDelay(4f));
     }
 
     private IEnumerator QuitWithDelay(float delay)
